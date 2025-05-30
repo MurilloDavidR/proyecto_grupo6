@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import RegistroPerfil from "./pages/RegistroPerfil";
-import Login from "./Login"; // Asegúrate de que el nombre del archivo esté bien
+import RegistroPersona from "./pages/RegistroPersona"; // <-- importa el nuevo componente
+import Login from "./Login";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} /> {/* Ruta principal para Login */}
+        <Route path="/" element={<Login />} />
         <Route path="/registro-perfil" element={<RegistroPerfil />} />
+        <Route path="/registro-persona" element={<RegistroPersona />} /> {/* nueva ruta */}
       </Routes>
     </Router>
   );
