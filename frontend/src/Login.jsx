@@ -16,7 +16,7 @@ function Login() {
             <h1 className="titulo">Sembrar, clima y calendario al alcance de nuestra tierra</h1>
             <div className="login-content">
                 <div className="login-image">
-                    <img src="/logo.png" alt="Logo" />
+                    <img src="logo.png" alt="logo" />
                 </div>
                 <div className="login-form">
                     <h2>Iniciar Sesión</h2>
