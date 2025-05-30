@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "react-router-dom": "^7.6.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
