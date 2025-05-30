@@ -1,61 +1,53 @@
-// src/pages/RegistroPerfil.jsx
-import { useState } from "react";
+import { useState } from 'react';
 
-const RegistroPerfil = () => {
-  const [nombre, setNombre] = useState("");
-  const [estado, setEstado] = useState(true);
-  const [mensaje, setMensaje] = useState("");
+function RegistroPerfil() {
+    const [nombre, setNombre] = useState('');
+    const [estado, setEstado] = useState('1'); // Estado predeterminado: Activo
+    const [mensaje, setMensaje] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3000/api/perfiles', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, estado }) // Enviar estado
+            });
 
-    const perfil = { nombre, estado };
+            if (response.ok) {
+                const data = await response.json();
+                setMensaje(data.message); // Mostrar mensaje de éxito
+                setNombre(''); // Limpiar el campo de entrada
+                setEstado('1'); // Restablecer estado a "Activo"
+            } else {
+                setMensaje('Error al registrar el perfil');
+            }
+        } catch (error) {
+            setMensaje('Hubo un problema con la solicitud');
+        }
+    };
 
-    try {
-      const response = await fetch("http://localhost:3000/api/perfiles", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(perfil),
-      });
+    return (
+        <div>
+            <h2>Registro de Perfil</h2>
+            {mensaje && <p>{mensaje}</p>} {/* Mostrar mensaje */}
+            <form onSubmit={handleSubmit}>
+                <input 
+                    type="text"
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                    placeholder="Nombre del perfil"
+                />
 
-      if (response.ok) {
-        setMensaje("✅ Perfil registrado exitosamente");
-        setNombre("");
-        setEstado(true);
-      } else {
-        setMensaje("❌ Error al registrar el perfil");
-      }
-    } catch (error) {
-      console.error("Error en la solicitud:", error);
-      setMensaje("❌ Error de conexión con el servidor");
-    }
-  };
+                <select value={estado} onChange={(e) => setEstado(e.target.value)}>
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                </select>
 
-  return (
-    <div className="registro-perfil">
-      <h2>Registro de Perfil</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Nombre del Perfil:</label>
-        <input
-          type="text"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-        />
-
-        <label>Estado:</label>
-        <select value={estado} onChange={(e) => setEstado(e.target.value === "true")}>
-          <option value="true">Activo</option>
-          <option value="false">Inactivo</option>
-        </select>
-
-        <button type="submit">Registrar Perfil</button>
-      </form>
-      {mensaje && <p>{mensaje}</p>}
-    </div>
-  );
-};
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
+    );
+}
 
 export default RegistroPerfil;
