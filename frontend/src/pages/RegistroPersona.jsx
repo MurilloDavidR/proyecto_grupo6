@@ -6,6 +6,7 @@ import logo from '../logo.png';
 
 const RegistroPersona = () => {
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [form, setForm] = useState({
     nombres: '',
@@ -13,38 +14,43 @@ const RegistroPersona = () => {
     correo: '',
     direccion: '',
     municipio: '',
-    telefono: '',
-    id_usuario: '',
-    estado: true
+    telefono: ''
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm({
-      ...form,
-      [name]: type === 'checkbox' ? checked : value
-    });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.correo)) {
+      setErrorMsg("📧 El correo no tiene un formato válido.");
+      return;
+    }
+
     try {
-      await axios.post('http://localhost:3000/api/persona', form);
-      alert('Persona registrada correctamente');
+      await axios.post('http://localhost:3000/api/persona/registro', form); // 🔧 uso correcto del endpoint y del objeto `form`
+      alert('✅ Persona registrada correctamente');
       setForm({
         nombres: '',
         apellidos: '',
         correo: '',
         direccion: '',
         municipio: '',
-        telefono: '',
-        id_usuario: '',
-        estado: true
+        telefono: ''
       });
-      navigate('/login'); // 🔁 Redirección automática
+      navigate('/login');
     } catch (error) {
       console.error('Error al registrar persona', error);
-      alert('Hubo un error al registrar la persona');
+      if (error.response && error.response.data?.error) {
+        setErrorMsg(error.response.data.error);
+      } else {
+        setErrorMsg("❌ Error interno al registrar persona.");
+      }
     }
   };
 
@@ -56,102 +62,24 @@ const RegistroPersona = () => {
         </div>
         <div className="registro-card">
           <h2>Registro</h2>
+          {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
+
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="nombres">Nombres</label>
-              <input
-                className="form-control"
-                type="text"
-                id="nombres"
-                name="nombres"
-                placeholder="Ingrese los nombres"
-                value={form.nombres}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="apellidos">Apellidos</label>
-              <input
-                className="form-control"
-                type="text"
-                id="apellidos"
-                name="apellidos"
-                placeholder="Ingrese los apellidos"
-                value={form.apellidos}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="correo">Correo</label>
-              <input
-                className="form-control"
-                type="email"
-                id="correo"
-                name="correo"
-                placeholder="Ingrese el correo"
-                value={form.correo}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="direccion">Dirección</label>
-              <input
-                className="form-control"
-                type="text"
-                id="direccion"
-                name="direccion"
-                placeholder="Ingrese la dirección"
-                value={form.direccion}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="municipio">Municipio</label>
-              <input
-                className="form-control"
-                type="text"
-                id="municipio"
-                name="municipio"
-                placeholder="Ingrese el municipio"
-                value={form.municipio}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="telefono">Teléfono</label>
-              <input
-                className="form-control"
-                type="text"
-                id="telefono"
-                name="telefono"
-                placeholder="Ingrese el teléfono"
-                value={form.telefono}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="id_usuario">ID de Usuario (opcional)</label>
-              <input
-                className="form-control"
-                type="text"
-                id="id_usuario"
-                name="id_usuario"
-                placeholder="Ingrese el ID del usuario"
-                value={form.id_usuario}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group checkbox-wrapper">
-              <label>
+            {['nombres', 'apellidos', 'correo', 'direccion', 'municipio', 'telefono'].map((field) => (
+              <div className="form-group" key={field}>
+                <label htmlFor={field}>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
                 <input
-                  type="checkbox"
-                  name="estado"
-                  checked={form.estado}
+                  className="form-control"
+                  type={field === 'correo' ? 'email' : 'text'}
+                  id={field}
+                  name={field}
+                  value={form[field]}
                   onChange={handleChange}
-                />{' '}
-                Activo
-              </label>
-            </div>
+                  required={['nombres', 'apellidos', 'correo'].includes(field)}
+                />
+              </div>
+            ))}
+
             <button type="submit" className="btn">Registrar Persona</button>
             <button
               type="button"
@@ -168,6 +96,3 @@ const RegistroPersona = () => {
 };
 
 export default RegistroPersona;
-
-
-
