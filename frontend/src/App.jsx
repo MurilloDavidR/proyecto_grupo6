@@ -10,6 +10,8 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/registro-perfil" element={<RegistroPerfil />} />
         <Route path="/registro-persona" element={<RegistroPersona />} /> {/* nueva ruta */}
+        <Route path="/login" element={<Login />} />
+        {/* Puedes agregar más rutas aquí */}
       </Routes>
     </Router>
   );
