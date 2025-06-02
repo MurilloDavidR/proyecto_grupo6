@@ -1,22 +1,41 @@
+// Importación de Nodemailer para el envío de correos electrónicos
 const nodemailer = require('nodemailer');
 
+// Carga de variables de entorno desde el archivo .env
+require('dotenv').config();
+
+// Configuración del transporte de correos usando Gmail
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'gmail', // Servicio de correo utilizado
   auth: {
-    user: 'proyectoingenieria05@gmail.com',       // tu correo aquí
-    pass: 'Colombia2025'                           // tu contraseña o contraseña de aplicación aquí
+    user: process.env.EMAIL_USER, // Usuario de correo obtenido desde el entorno
+    pass: process.env.EMAIL_PASS  // Contraseña de correo obtenida desde el entorno
   }
 });
 
-async function enviarCorreoRegistro(destino, nombres) {
-  const mailOptions = {
-    from: '"Proyecto Ingeniería" <proyectoingenieria05@gmail.com>',
-    to: destino,
-    subject: 'Registro exitoso en la aplicación',
-    text: `Hola ${nombres},\n\nGracias por registrarte en nuestra aplicación.\n\nSaludos,\nEl equipo de Proyecto Ingeniería`
-  };
+// Función para enviar un correo de confirmación de registro
+const enviarCorreoRegistro = async (destinatario, nombre) => {
+  await transporter.sendMail({
+    from: `"Sistema de Registro" <${process.env.EMAIL_USER}>`, // Remitente del correo
+    to: destinatario, // Dirección de correo del destinatario
+    subject: '🎉 Registro exitoso', // Asunto del correo
+    html: `<h3>Hola ${nombre},</h3>
+           <p>Tu registro fue exitoso. ¡Bienvenido/a al sistema! 🌱</p>` // Contenido en HTML del correo
+  });
+};
 
-  return transporter.sendMail(mailOptions);
-}
+// Función para enviar un correo con una nueva contraseña temporal
+const enviarCorreoClave = async (destinatario, nombre, clave) => {
+  await transporter.sendMail({
+    from: `"Soporte Sistema" <${process.env.EMAIL_USER}>`, // Remitente del correo
+    to: destinatario, // Dirección de correo del destinatario
+    subject: '🔐 Recuperación de contraseña', // Asunto del correo
+    html: `
+      <p>Hola ${nombre},</p>
+      <p>Tu nueva contraseña temporal es: <strong>${clave}</strong></p>
+      <p>Por favor inicia sesión y cámbiala lo antes posible.</p>` // Contenido en HTML con la clave temporal
+  });
+};
 
-module.exports = { enviarCorreoRegistro };
+// Exportación de funciones para ser utilizadas en otros archivos
+module.exports = { enviarCorreoRegistro, enviarCorreoClave };
