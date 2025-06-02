@@ -1,13 +1,19 @@
 /* Fondo y fuente global */
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
+
 body {
-    background-color: #fdf6e3; /* Beige claro */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
+    min-height: 100vh;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Centrado vertical */
+    background-color: #fdf6e3;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 /* Contenedor principal */

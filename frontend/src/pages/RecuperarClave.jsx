@@ -1,6 +1,7 @@
 // Importación de módulos necesarios
 import { useState } from 'react'; // Hook para manejar el estado del componente
 import axios from 'axios'; // Librería para realizar peticiones HTTP
+import '../styles/RegistroClave.css'; // Importación de estilos específicos para el componente
 
 // Definición del componente de recuperación de clave
 function RecuperarClave() {
