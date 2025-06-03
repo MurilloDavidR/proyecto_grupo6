@@ -14,7 +14,8 @@ const RegistroPersona = () => {
     correo: '',
     direccion: '',
     municipio: '',
-    telefono: ''
+    telefono: '',
+    password: ''
   });
 
   const handleChange = (e) => {
@@ -79,6 +80,18 @@ const RegistroPersona = () => {
                 />
               </div>
             ))}
+            <div className="form-group">
+              <label htmlFor="password">Contraseña</label>
+              <input
+                className="form-control"
+                type="password"
+                id="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
             <button type="submit" className="btn">Registrar Persona</button>
             <button

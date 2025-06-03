@@ -1,11 +1,18 @@
 // Importación de módulos necesarios para configurar el servidor
+const dotenv = require('dotenv'); // Carga variables de entorno desde un archivo .env
+dotenv.config();
+
 const express = require('express'); // Framework para crear aplicaciones web y APIs en Node.js
 const cors = require('cors'); // Middleware para permitir solicitudes desde diferentes dominios
-const dotenv = require('dotenv'); // Carga variables de entorno desde un archivo .env
 const db = require('./config/db'); // Configuración de la base de datos
 
-// Cargar las variables de entorno definidas en el archivo .env
-dotenv.config(); 
+console.log('Variables de entorno cargadas:', {
+  DB_HOST: process.env.DB_HOST,
+  DB_USER: process.env.DB_USER,
+  DB_PASS: process.env.DB_PASS,
+  DB_NAME: process.env.DB_NAME,
+  PORT: process.env.PORT
+});
 
 // Inicialización de la aplicación Express
 const app = express();
