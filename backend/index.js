@@ -2,6 +2,11 @@
 const dotenv = require('dotenv'); // Carga variables de entorno desde un archivo .env
 dotenv.config();
 
+// Sobrescribir DB_HOST para usar localhost en lugar de la IP si es necesario
+if (process.env.DB_HOST === '192.168.1.14') {
+  process.env.DB_HOST = 'localhost';
+}
+
 const express = require('express'); // Framework para crear aplicaciones web y APIs en Node.js
 const cors = require('cors'); // Middleware para permitir solicitudes desde diferentes dominios
 const db = require('./config/db'); // Configuración de la base de datos

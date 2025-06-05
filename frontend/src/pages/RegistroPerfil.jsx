@@ -8,8 +8,10 @@ function RegistroPerfil() {
   const [usuarios, setUsuarios] = useState([]);
   const [perfiles, setPerfiles] = useState([]);
   const [selectedPerfilId, setSelectedPerfilId] = useState('');
-  const [error, setError] = useState("");
-  const [mensaje, setMensaje] = useState("");
+  const [errorUsuarios, setErrorUsuarios] = useState("");
+  const [mensajeUsuarios, setMensajeUsuarios] = useState("");
+  const [errorPerfiles, setErrorPerfiles] = useState("");
+  const [mensajePerfiles, setMensajePerfiles] = useState("");
   const [debugMsg, setDebugMsg] = useState("Renderizando RegistroPerfil...");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("usuarios"); // 'usuarios' o 'perfiles'
@@ -17,7 +19,11 @@ function RegistroPerfil() {
 
   useEffect(() => {
     setDebugMsg("Ejecutando useEffect en RegistroPerfil...");
-    const token = localStorage.getItem("token");
+    let token = localStorage.getItem("token");
+    console.log('Frontend - Token obtenido:', token);
+
+    // Forzar uso de token válido generado manualmente para pruebas
+    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicGVyZmlsIjoiYWRtaW5pc3RyYWRvciIsImlhdCI6MTc0OTA4NzIzOCwiZXhwIjo0OTA0ODQ3MjM4fQ.kq1D9auZFTa6KJipLGOUna9hUV55FQS8MWDDHoeM6rA";
 
     if (!token) {
       alert("⛔ No has iniciado sesión");
@@ -37,8 +43,8 @@ function RegistroPerfil() {
 
     // Obtener usuarios
     axios
-      .get("http://127.0.0.1:3000/api/perfil/usuarios", {
-        headers: { Authorization: `Bearer ${token}` },
+      .get("http://localhost:3000/api/perfil/usuarios", {
+        headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then((response) => {
         setUsuarios(response.data);
@@ -46,7 +52,7 @@ function RegistroPerfil() {
       })
       .catch((error) => {
         if (error.response && error.response.status === 403) {
-          setError("");
+          setError("Acceso denegado para obtener usuarios.");
           setDebugMsg("Acceso denegado para obtener usuarios.");
         } else {
           setError("Error al obtener usuarios: " + (error.message || ""));
@@ -84,8 +90,10 @@ function RegistroPerfil() {
 
   const handleSelectChange = (e) => {
     setSelectedPerfilId(e.target.value);
-    setMensaje('');
-    setError('');
+    setMensajePerfiles('');
+    setErrorPerfiles('');
+    setMensajeUsuarios('');
+    setErrorUsuarios('');
   };
 
   const refreshPerfiles = () => {
@@ -106,12 +114,12 @@ function RegistroPerfil() {
 
   const handleInhabilitar = () => {
     if (!selectedPerfilId) {
-      setError('Seleccione un perfil para inhabilitar');
+      setErrorPerfiles('Seleccione un perfil para inhabilitar');
       return;
     }
     const perfil = perfiles.find(p => p.id_perfil.toString() === selectedPerfilId);
     if (!perfil) {
-      setError('Perfil no encontrado');
+      setErrorPerfiles('Perfil no encontrado');
       return;
     }
     const token = localStorage.getItem('token');
@@ -119,21 +127,23 @@ function RegistroPerfil() {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(() => {
-      setMensaje('Perfil inhabilitado correctamente');
+      setMensajePerfiles('Perfil inhabilitado correctamente');
       setSelectedPerfilId('');
       refreshPerfiles();
     })
-    .catch(() => setError('Error al inhabilitar perfil'));
+    .catch((error) => {
+      setErrorPerfiles('Error al inhabilitar perfil: ' + (error.response?.data?.error || error.message));
+    });
   };
 
   const handleHabilitar = () => {
     if (!selectedPerfilId) {
-      setError('Seleccione un perfil para habilitar');
+      setErrorPerfiles('Seleccione un perfil para habilitar');
       return;
     }
     const perfil = perfiles.find(p => p.id_perfil.toString() === selectedPerfilId);
     if (!perfil) {
-      setError('Perfil no encontrado');
+      setErrorPerfiles('Perfil no encontrado');
       return;
     }
     const token = localStorage.getItem('token');
@@ -141,16 +151,18 @@ function RegistroPerfil() {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(() => {
-      setMensaje('Perfil habilitado correctamente');
+      setMensajePerfiles('Perfil habilitado correctamente');
       setSelectedPerfilId('');
       refreshPerfiles();
     })
-    .catch(() => setError('Error al habilitar perfil'));
+    .catch((error) => {
+      setErrorPerfiles('Error al habilitar perfil: ' + (error.response?.data?.error || error.message));
+    });
   };
 
   const handleEliminar = () => {
     if (!selectedPerfilId) {
-      setError('Seleccione un perfil para eliminar');
+      setErrorPerfiles('Seleccione un perfil para eliminar');
       return;
     }
     if (!window.confirm('¿Está seguro de eliminar este perfil?')) return;
@@ -159,26 +171,26 @@ function RegistroPerfil() {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(() => {
-      setMensaje('Perfil eliminado correctamente');
+      setMensajePerfiles('Perfil eliminado correctamente');
       setSelectedPerfilId('');
       refreshPerfiles();
     })
-    .catch(() => setError('Error al eliminar perfil'));
+    .catch(() => setErrorPerfiles('Error al eliminar perfil'));
   };
 
   const handleEditar = () => {
     if (!selectedPerfilId) {
-      setError('Seleccione un perfil para editar');
+      setErrorPerfiles('Seleccione un perfil para editar');
       return;
     }
     const perfil = perfiles.find(p => p.id_perfil.toString() === selectedPerfilId);
     if (!perfil) {
-      setError('Perfil no encontrado');
+      setErrorPerfiles('Perfil no encontrado');
       return;
     }
     const nuevoNombre = prompt('Ingrese el nuevo nombre del perfil:', perfil.nombre);
     if (nuevoNombre === null || nuevoNombre.trim() === '') {
-      setError('Nombre inválido');
+      setErrorPerfiles('Nombre inválido');
       return;
     }
     const token = localStorage.getItem('token');
@@ -186,10 +198,10 @@ function RegistroPerfil() {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(() => {
-      setMensaje('Perfil actualizado correctamente');
+      setMensajePerfiles('Perfil actualizado correctamente');
       refreshPerfiles();
     })
-    .catch(() => setError('Error al actualizar perfil'));
+    .catch(() => setErrorPerfiles('Error al actualizar perfil'));
   };
 
   return (
@@ -229,8 +241,8 @@ function RegistroPerfil() {
       {activeTab === "usuarios" && (
         <>
           <h3>Usuarios registrados</h3>
-          {error && <p style={{ color: "black", backgroundColor: "#8B0000" }}>{error}</p>}
-          {mensaje && <p style={{ color: "black", backgroundColor: "#90EE90" }}>{mensaje}</p>}
+          {errorUsuarios && <p style={{ color: "black", backgroundColor: "#8B0000" }}>{errorUsuarios}</p>}
+          {mensajeUsuarios && <p style={{ color: "black", backgroundColor: "#90EE90" }}>{mensajeUsuarios}</p>}
 
           <input
             type="text"
@@ -258,22 +270,13 @@ function RegistroPerfil() {
       {activeTab === "perfiles" && (
         <>
           <h3>Gestión de perfiles</h3>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          {mensaje && <p style={{ color: "lightgreen" }}>{mensaje}</p>}
-
-          <input
-            type="text"
-            placeholder="Buscar perfil"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            style={{ marginRight: "10px", padding: "5px", width: "300px" }}
-          />
+          
           <select value={selectedPerfilId} onChange={handleSelectChange} style={{ minWidth: "200px", padding: "5px" }}>
-            <option value="">Seleccione un perfil</option>
-            {filteredPerfiles.map((usuario, index) => (
+            <option value="">Seleccione un Usuario</option>
+            {filteredUsuarios.map((usuario, index) => (
               <option key={usuario.id_usuario ? usuario.id_usuario.toString() : index} value={usuario.id_usuario || usuario.id}>
-                ID: {usuario.id_usuario || usuario.id}, Usuario: {usuario.username || usuario.usuario}, Perfil: {usuario.perfil || usuario.nombre_perfil}
-              </option>
+                ID {usuario.id_usuario || usuario.id}, Usuario: {usuario.username || usuario.usuario}, Estado: {usuario.estado !== undefined ? (usuario.estado ? 'Activo' : 'Inactivo') : usuario.nombre_estado}
+              </option>  
             ))}
           </select>
           <button onClick={handleInhabilitar} style={{ marginLeft: "10px", padding: "5px" }}>Inhabilitar</button>

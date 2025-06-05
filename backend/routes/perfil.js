@@ -24,7 +24,7 @@ router.get('/', authenticateToken, async (req, res) => {
 });
 
 // 📌 Registrar un nuevo perfil
-router.post('/', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+router.post('/', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
   const { nombre, estado } = req.body;
 
   if (!nombre || estado === undefined) {
@@ -80,7 +80,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 router.get('/usuarios', authenticateToken, async (req, res) => {
   try {
     const [rows] = await db.execute(
-      "SELECT u.id_usuario, u.username, p.nombre as perfil FROM usuario u JOIN perfil p ON u.id_perfil = p.id_perfil"
+      "SELECT u.id_usuario, u.username, p.nombre as perfil, p.estado FROM usuario u JOIN perfil p ON u.id_perfil = p.id_perfil"
     );
     res.json(rows);
   } catch (error) {
