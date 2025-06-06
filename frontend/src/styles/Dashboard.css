@@ -78,6 +78,93 @@
   background: #f44336;
 }
 
+.dashboard-calendar {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 15px;
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: start;
+}
+
+.calendar-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.calendar-container .react-calendar {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.calendar-container .react-calendar__navigation button {
+  color: white;
+  font-size: 1.2rem;
+}
+
+.calendar-container .react-calendar__month-view__weekdays {
+  color: #a0e6c8;
+  font-weight: bold;
+}
+
+.calendar-container .react-calendar__tile {
+  padding: 1em 0.5em;
+  color: white;
+  font-weight: 500;
+}
+
+.calendar-container .react-calendar__tile:enabled:hover {
+  background: rgba(1, 132, 65, 0.6);
+  color: white;
+}
+
+.calendar-container .react-calendar__tile--now {
+  background: #018441;
+  color: white;
+}
+
+.calendar-container .react-calendar__tile--active {
+  background: #02a652;
+  color: white;
+}
+
+.calendar-container .react-calendar__navigation button:enabled:hover,
+.calendar-container .react-calendar__navigation button:enabled:focus {
+  background-color: rgba(1, 132, 65, 0.6);
+}
+
+.calendar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 200px;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.info-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: #a0e6c8;
+}
+
+.info-card p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -104,6 +191,64 @@
   font-size: 0.9rem;
 }
 
+.farming-recommendations {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 15px;
+  margin: 2rem 0;
+}
+
+.farming-recommendations h2 {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.recommendation-card {
+  background: rgba(1, 132, 65, 0.2);
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-5px);
+}
+
+.recommendation-card h3 {
+  color: #a0e6c8;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.recommendation-card p {
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.recommendation-card ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recommendation-card li {
+  color: white;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recommendation-card li:last-child {
+  border-bottom: none;
+}
+
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
@@ -116,5 +261,19 @@
   .dashboard-button {
     width: 100%;
     margin: 0.5rem 0;
+  }
+
+  .dashboard-calendar {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-info {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .info-card {
+    min-width: 150px;
   }
 }
