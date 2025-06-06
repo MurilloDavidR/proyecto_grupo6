@@ -1,50 +1,178 @@
-.registro-perfil {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-h2 {
-  color: #333;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-input, select {
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  margin-top: 15px;
-  padding: 10px;
-  background-color: #007bff;
+.registro-perfil-container {
+  background: linear-gradient(135deg, #013220 0%, #025d3b 100%);
+  min-height: 100vh;
+  padding: 2rem;
   color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-text {
+  color: #ffffff;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.profile-text {
+  color: #a0e6c8;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.debug-message {
+  color: white;
+  background-color: rgba(0, 100, 0, 0.5);
+  padding: 10px;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.tabs-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab-button {
+  padding: 12px 24px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.tab-button.active {
+  background: #018441;
+  color: white;
+}
+
+.content-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+}
+
+.user-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.search-bar::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.user-select {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #013220;
+  margin-bottom: 1rem;
+  font-size: 1rem;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+/* Estilo para las opciones del select */
+.user-select option {
+  background: white;
+  color: #013220;
+  padding: 12px;
+  font-size: 1rem;
 }
 
-p {
-  margin-top: 10px;
-  color: #28a745;
-  font-weight: bold;
+/* Estilo para cuando el select está enfocado */
+.user-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #018441;
+}
+
+.action-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;  margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #018441;
+  color: white;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.action-button.delete {
+  background: #d32f2f;
+}
+
+.action-button.edit {
+  background: #1976d2;
+}
+
+.message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.success {
+  background: rgba(76, 175, 80, 0.2);
+  color: #81c784;
+}
+
+.error {
+  background: rgba(244, 67, 54, 0.2);
+  color: #e57373;
+}
+
+.back-button {
+  background: #018441;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+}
+
+.back-button:hover {
+  background: #02a652;
+  transform: translateY(-2px);
 }

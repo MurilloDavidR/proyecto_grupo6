@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-// Configurar la URL base de axios
-axios.defaults.baseURL = 'http://localhost:3000';
+import "../styles/RegistroPerfil.css";
 
 function RegistroPerfil() {
   const navigate = useNavigate();
@@ -17,15 +15,13 @@ function RegistroPerfil() {
   const [mensajePerfiles, setMensajePerfiles] = useState("");
   const [debugMsg, setDebugMsg] = useState("Renderizando RegistroPerfil...");
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("usuarios"); // 'usuarios' o 'perfiles'
+  const [activeTab, setActiveTab] = useState("usuarios");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setDebugMsg("Ejecutando useEffect en RegistroPerfil...");
     let token = localStorage.getItem("token");
     console.log('Frontend - Token obtenido:', token);
 
-    // Usar el token almacenado en localStorage
     if (!token) {
       alert("⛔ No has iniciado sesión");
       navigate("/login");
@@ -42,27 +38,21 @@ function RegistroPerfil() {
     setUserData({ username: payload.username || "", perfil: payload.perfil || "" });
     setDebugMsg("Token válido, obteniendo usuarios y perfiles...");
 
-    // Obtener usuarios
-    axios
-      .get("/api/perfil/usuarios", {
-        headers: { Authorization: token ? `Bearer ${token}` : '' },
-      })
-      .then((response) => {
-        console.log('Usuarios recibidos:', response.data);
-        setUsuarios(response.data);
-        setDebugMsg("Usuarios obtenidos correctamente.");
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 403) {
-          setErrorUsuarios("Acceso denegado para obtener usuarios.");
-          setDebugMsg("Acceso denegado para obtener usuarios.");
-        } else {
-          setErrorUsuarios("Error al obtener usuarios: " + (error.message || ""));
-          setDebugMsg("Error al obtener usuarios: " + (error.message || ""));
-        }
-      });
+    axios.get("/api/perfil/usuarios", {
+      headers: { Authorization: token ? `Bearer ${token}` : '' },
+    })
+    .then((response) => {
+      setUsuarios(response.data);
+      setDebugMsg("Usuarios obtenidos correctamente.");
+    })
+    .catch((error) => {
+      const errorMsg = error.response?.status === 403 
+        ? "Acceso denegado para obtener usuarios."
+        : "Error al obtener usuarios: " + (error.message || "");
+      setErrorUsuarios(errorMsg);
+      setDebugMsg(errorMsg);
+    });
 
-    // Obtener perfiles
     axios.get('/api/perfil', {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -78,17 +68,7 @@ function RegistroPerfil() {
     .finally(() => setLoading(false));
   }, [navigate]);
 
-  const filteredUsuarios = usuarios.filter((usuario) =>
-    usuario.username && usuario.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const filteredPerfiles = perfiles.filter((perfil) =>
-    perfil.nombre && perfil.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
   const handleSelectChange = (e) => {
     setSelectedPerfilId(e.target.value);
@@ -98,270 +78,196 @@ function RegistroPerfil() {
     setErrorUsuarios('');
   };
 
-  const refreshUsuarios = () => {
-    const token = localStorage.getItem('token');
-    axios.get("/api/perfil/usuarios", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(response => {
-      setUsuarios(response.data);
-      setDebugMsg("Lista de usuarios actualizada");
-    })
-    .catch(error => {
-      setErrorPerfiles('Error al obtener usuarios: ' + (error.response?.data?.error || error.message));
-      setDebugMsg("Error al actualizar lista de usuarios");
-    });
-  };
+  const filteredUsuarios = usuarios.filter((usuario) =>
+    usuario.username?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const handleInhabilitar = () => {
+  const handleUserAction = async (action) => {
     if (!selectedPerfilId) {
-      setErrorPerfiles('Seleccione un usuario para inhabilitar');
+      setErrorPerfiles(`Seleccione un usuario para ${action}`);
       return;
     }
+
     const usuario = usuarios.find(u => u.id_usuario.toString() === selectedPerfilId);
     if (!usuario) {
       setErrorPerfiles('Usuario no encontrado');
       return;
     }
-    const token = localStorage.getItem('token');
-    console.log('Inhabilitando usuario:', selectedPerfilId);
-    console.log('Usuario antes de inhabilitar:', usuario);
-    axios.put(`/api/usuario/inhabilitar/${selectedPerfilId}`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then((inhabilitar_response) => {
-      console.log('Respuesta al inhabilitar:', inhabilitar_response.data);
-      setMensajePerfiles('✅ Usuario inhabilitado correctamente. Estado: Inactivo');
-      
-      // Actualizar el usuario localmente
-      const usuariosActualizados = usuarios.map(u => {
-        if (u.id_usuario.toString() === selectedPerfilId) {
-          return { ...u, estado: 0 };
-        }
-        return u;
-      });
-      setUsuarios(usuariosActualizados);
-      setSelectedPerfilId('');
-    })
-    .catch((error) => {
-      setErrorPerfiles('Error al inhabilitar usuario: ' + (error.response?.data?.error || error.message));
-    });
-  };
 
-  const handleHabilitar = () => {
-    if (!selectedPerfilId) {
-      setErrorPerfiles('Seleccione un usuario para habilitar');
-      return;
-    }
-    const usuario = usuarios.find(u => u.id_usuario.toString() === selectedPerfilId);
-    if (!usuario) {
-      setErrorPerfiles('Usuario no encontrado');
-      return;
-    }
     const token = localStorage.getItem('token');
-    console.log('Habilitando usuario:', selectedPerfilId);
-    axios.put(`/api/usuario/habilitar/${selectedPerfilId}`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(() => {
-      setMensajePerfiles('✅ Usuario habilitado correctamente. Estado: Activo');
-      
-      // Actualizar el usuario localmente
-      const usuariosActualizados = usuarios.map(u => {
-        if (u.id_usuario.toString() === selectedPerfilId) {
-          return { ...u, estado: 1 };
-        }
-        return u;
-      });
-      setUsuarios(usuariosActualizados);
-      setSelectedPerfilId('');
-    })
-    .catch((error) => {
-      setErrorPerfiles('Error al habilitar usuario: ' + (error.response?.data?.error || error.message));
-    });
-  };
-
-  const handleEliminar = () => {
-    if (!selectedPerfilId) {
-      setErrorPerfiles('Seleccione un usuario para eliminar');
-      return;
-    }
-    if (!window.confirm('¿Está seguro de eliminar este usuario?')) return;
-    const token = localStorage.getItem('token');
-    axios.delete(`/api/usuario/${selectedPerfilId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(() => {
-      setMensajePerfiles('Usuario eliminado correctamente');
-      setSelectedPerfilId('');
-      // Actualizar la lista de usuarios
-      axios.get("/api/perfil/usuarios", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setUsuarios(response.data);
-      });
-    })
-    .catch(() => setErrorPerfiles('Error al eliminar usuario'));
-  };
-
-  const handleEditar = () => {
-    if (!selectedPerfilId) {
-      setErrorPerfiles('Seleccione un usuario para editar');
-      return;
-    }
-    const usuario = usuarios.find(u => u.id_usuario.toString() === selectedPerfilId);
-    console.log('Usuario encontrado:', usuario);
-    if (!usuario) {
-      setErrorPerfiles('Usuario no encontrado');
-      return;
-    }
-    const nuevoNombre = prompt('Ingrese el nuevo nombre de usuario:', usuario.username);
-    if (nuevoNombre === null || nuevoNombre.trim() === '') {
-      setErrorPerfiles('Nombre inválido');
-      return;
-    }
-    const token = localStorage.getItem('token');
-    console.log('Token a utilizar:', token);
     try {
-      // Decodificar y mostrar el payload del token
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log('Token payload:', payload);
-    } catch (error) {
-      console.error('Error al decodificar token:', error);
-    }
-    axios.get('/api/perfil', {
-      headers: { 
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+      let response;
+      switch (action) {
+        case 'inhabilitar':
+          response = await axios.put(`/api/usuario/inhabilitar/${selectedPerfilId}`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setMensajePerfiles('✅ Usuario inhabilitado correctamente');
+          break;
+        case 'habilitar':
+          response = await axios.put(`/api/usuario/habilitar/${selectedPerfilId}`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setMensajePerfiles('✅ Usuario habilitado correctamente');
+          break;
+        case 'eliminar':
+          if (!window.confirm('¿Está seguro de eliminar este usuario?')) return;
+          response = await axios.delete(`/api/usuario/${selectedPerfilId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setMensajePerfiles('Usuario eliminado correctamente');
+          break;
+        case 'editar':
+          const nuevoNombre = prompt('Ingrese el nuevo nombre de usuario:', usuario.username);
+          if (!nuevoNombre?.trim()) {
+            setErrorPerfiles('Nombre inválido');
+            return;
+          }
+          const perfilResponse = await axios.get('/api/perfil', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const perfilEncontrado = perfilResponse.data.find(
+            p => p.nombre.toLowerCase() === usuario.perfil.toLowerCase()
+          );
+          if (!perfilEncontrado) {
+            setErrorPerfiles('Error: No se pudo encontrar el perfil del usuario');
+            return;
+          }
+          response = await axios.put(`/api/usuario/${selectedPerfilId}`, 
+            { username: nuevoNombre.trim(), id_perfil: perfilEncontrado.id_perfil },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setMensajePerfiles('Usuario actualizado correctamente');
+          break;
       }
-    })
-    .then(perfilesResponse => {
-      console.log('Perfiles disponibles:', perfilesResponse.data);
-      
-      // Encontrar el perfil correcto
-      const perfilEncontrado = perfilesResponse.data.find(p => p.nombre.toLowerCase() === usuario.perfil.toLowerCase());
-      if (!perfilEncontrado) {
-        setErrorPerfiles('Error: No se pudo encontrar el perfil del usuario');
-        return;
-      }
-      
-      console.log('Perfil encontrado:', perfilEncontrado);
-      const datosActualizacion = {
-        username: nuevoNombre.trim(),
-        id_perfil: perfilEncontrado.id_perfil
-      };
-      console.log('Datos a enviar en la actualización:', datosActualizacion);
-      
-      return axios.put(`/api/usuario/${selectedPerfilId}`, datosActualizacion, {
-      headers: { 
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+
+      // Actualizar lista de usuarios
+      const usuariosResponse = await axios.get("/api/perfil/usuarios", {
+        headers: { Authorization: `Bearer ${token}` }
       });
-    })
-    .then((editar_response) => {
-      if (!editar_response) return; // Si no hay respuesta es porque hubo error al obtener el perfil
-      console.log('Respuesta completa del servidor:', editar_response);
-      console.log('Respuesta al editar:', editar_response.data);
-      setMensajePerfiles('Usuario actualizado correctamente');
-      
-      // Actualizar el usuario localmente
-      const usuariosActualizados = usuarios.map(u => {
-        if (u.id_usuario.toString() === selectedPerfilId) {
-          return { ...u, username: nuevoNombre.trim() };
-        }
-        return u;
-      });
-      setUsuarios(usuariosActualizados);
+      setUsuarios(usuariosResponse.data);
       setSelectedPerfilId('');
-    })
-    .catch(() => setErrorPerfiles('Error al actualizar usuario'));
+    } catch (error) {
+      setErrorPerfiles(`Error al ${action} usuario: ${error.response?.data?.error || error.message}`);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="registro-perfil-container">
+        <div className="header-section">
+          <h2 className="welcome-text">Cargando...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ backgroundColor: "#013220", color: "black", minHeight: "100vh", padding: "20px" }}>
-      <h2>Bienvenido, {userData.username}</h2>
-      <p>Perfil: {userData.perfil}</p>
-      <p style={{ color: "black", backgroundColor: "#006400", padding: "5px" }}>{debugMsg}</p>
+    <div className="registro-perfil-container">
+      <div className="header-section">
+        <h2 className="welcome-text">¡Bienvenido, {userData.username}!</h2>
+        <p className="profile-text">Perfil: {userData.perfil}</p>
+      </div>
 
-      <div style={{ marginBottom: "20px" }}>
+      {debugMsg && (
+        <div className="debug-message">{debugMsg}</div>
+      )}
+
+      <div className="tabs-container">
         <button
+          className={`tab-button ${activeTab === "usuarios" ? "active" : ""}`}
           onClick={() => setActiveTab("usuarios")}
-          style={{
-            padding: "10px",
-            marginRight: "10px",
-            backgroundColor: activeTab === "usuarios" ? "#006400" : "#ccc",
-            color: activeTab === "usuarios" ? "white" : "black",
-            border: "none",
-            cursor: "pointer",
-          }}
         >
           Usuarios
         </button>
         <button
+          className={`tab-button ${activeTab === "perfiles" ? "active" : ""}`}
           onClick={() => setActiveTab("perfiles")}
-          style={{
-            padding: "10px",
-            backgroundColor: activeTab === "perfiles" ? "#006400" : "#ccc",
-            color: activeTab === "perfiles" ? "white" : "black",
-            border: "none",
-            cursor: "pointer",
-          }}
         >
           Perfiles
         </button>
       </div>
 
       {activeTab === "usuarios" && (
-        <>
+        <div className="content-section">
           <h3>Usuarios registrados</h3>
-          {errorUsuarios && <p style={{ color: "black", backgroundColor: "#8B0000" }}>{errorUsuarios}</p>}
-          {mensajeUsuarios && <p style={{ color: "black", backgroundColor: "#90EE90" }}>{mensajeUsuarios}</p>}
+          {errorUsuarios && <div className="message error">{errorUsuarios}</div>}
+          {mensajeUsuarios && <div className="message success">{mensajeUsuarios}</div>}
 
           <input
             type="text"
             placeholder="Buscar usuario"
             value={searchTerm}
             onChange={handleSearchChange}
-            style={{ marginBottom: "10px", padding: "5px", width: "80%" }}
+            className="search-bar"
           />
-          <button
-            onClick={() => setSearchTerm(searchTerm)}
-            style={{ marginLeft: "10px", padding: "5px" }}
-          >
-            Buscar
-          </button>
-          <ul>
+
+          <ul className="user-list">
             {filteredUsuarios.map((usuario) => (
-              <li key={usuario.id_usuario}>
+              <li key={usuario.id_usuario} className="user-item">
                 {usuario.username} - Perfil: {usuario.perfil}
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
 
       {activeTab === "perfiles" && (
-        <>
+        <div className="content-section">
           <h3>Gestión de perfiles</h3>
+          {errorPerfiles && <div className="message error">{errorPerfiles}</div>}
+          {mensajePerfiles && <div className="message success">{mensajePerfiles}</div>}
           
-          <select value={selectedPerfilId} onChange={handleSelectChange} style={{ minWidth: "200px", padding: "5px" }}>
+          <select 
+            value={selectedPerfilId} 
+            onChange={handleSelectChange} 
+            className="user-select"
+          >
             <option value="">Seleccione un Usuario</option>
-            {filteredUsuarios.map((usuario, index) => (
-              <option key={usuario.id_usuario ? usuario.id_usuario.toString() : index} value={usuario.id_usuario || usuario.id}>
-                ID: {usuario.id_usuario || usuario.id} | Usuario: {usuario.username || usuario.usuario} | Estado: {parseInt(usuario.estado) === 1 ? '✅ Activo' : '❌ Inactivo'}
-              </option>  
+            {filteredUsuarios.map((usuario) => (
+              <option 
+                key={usuario.id_usuario} 
+                value={usuario.id_usuario}
+              >
+                ID: {usuario.id_usuario} | Usuario: {usuario.username} | 
+                Estado: {parseInt(usuario.estado) === 1 ? '✅ Activo' : '❌ Inactivo'}
+              </option>
             ))}
           </select>
-          <button onClick={handleInhabilitar} style={{ marginLeft: "10px", padding: "5px" }}>Inhabilitar</button>
-          <button onClick={handleHabilitar} style={{ marginLeft: "10px", padding: "5px" }}>Habilitar</button>
-          <button onClick={handleEliminar} style={{ marginLeft: "10px", padding: "5px" }}>Eliminar</button>
-          <button onClick={handleEditar} style={{ marginLeft: "10px", padding: "5px" }}>Editar</button>
-        </>
+
+          <div>
+            <button 
+              className="action-button"
+              onClick={() => handleUserAction('inhabilitar')}
+            >
+              Inhabilitar
+            </button>
+            <button 
+              className="action-button"
+              onClick={() => handleUserAction('habilitar')}
+            >
+              Habilitar
+            </button>
+            <button 
+              className="action-button delete"
+              onClick={() => handleUserAction('eliminar')}
+            >
+              Eliminar
+            </button>
+            <button 
+              className="action-button edit"
+              onClick={() => handleUserAction('editar')}
+            >
+              Editar
+            </button>
+          </div>
+        </div>
       )}
 
-      <button onClick={() => window.location.href = '/dashboard'} style={{ marginTop: '20px', padding: '10px', fontSize: '16px' }}>
+      <button 
+        className="back-button"
+        onClick={() => navigate('/dashboard')}
+      >
         Regresar a Dashboard
       </button>
     </div>
@@ -369,4 +275,3 @@ function RegistroPerfil() {
 }
 
 export default RegistroPerfil;
-
