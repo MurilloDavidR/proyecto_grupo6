@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// Configurar la URL base de axios
+axios.defaults.baseURL = 'http://localhost:3000';
+
 function RegistroPerfil() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({ username: "", perfil: "" });
@@ -22,9 +25,7 @@ function RegistroPerfil() {
     let token = localStorage.getItem("token");
     console.log('Frontend - Token obtenido:', token);
 
-    // Forzar uso de token válido generado manualmente para pruebas
-    token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicGVyZmlsIjoiYWRtaW5pc3RyYWRvciIsImlhdCI6MTc0OTA4NzIzOCwiZXhwIjo0OTA0ODQ3MjM4fQ.kq1D9auZFTa6KJipLGOUna9hUV55FQS8MWDDHoeM6rA";
-
+    // Usar el token almacenado en localStorage
     if (!token) {
       alert("⛔ No has iniciado sesión");
       navigate("/login");
@@ -43,19 +44,20 @@ function RegistroPerfil() {
 
     // Obtener usuarios
     axios
-      .get("http://localhost:3000/api/perfil/usuarios", {
+      .get("/api/perfil/usuarios", {
         headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
       .then((response) => {
+        console.log('Usuarios recibidos:', response.data);
         setUsuarios(response.data);
         setDebugMsg("Usuarios obtenidos correctamente.");
       })
       .catch((error) => {
         if (error.response && error.response.status === 403) {
-          setError("Acceso denegado para obtener usuarios.");
+          setErrorUsuarios("Acceso denegado para obtener usuarios.");
           setDebugMsg("Acceso denegado para obtener usuarios.");
         } else {
-          setError("Error al obtener usuarios: " + (error.message || ""));
+          setErrorUsuarios("Error al obtener usuarios: " + (error.message || ""));
           setDebugMsg("Error al obtener usuarios: " + (error.message || ""));
         }
       });
@@ -69,10 +71,10 @@ function RegistroPerfil() {
         setPerfiles(response.data);
       } else {
         setPerfiles([]);
-        setError('Respuesta inesperada del servidor');
+        setErrorPerfiles('Respuesta inesperada del servidor');
       }
     })
-    .catch(() => setError('Error al obtener perfiles'))
+    .catch(() => setErrorPerfiles('Error al obtener perfiles'))
     .finally(() => setLoading(false));
   }, [navigate]);
 
@@ -96,112 +98,185 @@ function RegistroPerfil() {
     setErrorUsuarios('');
   };
 
-  const refreshPerfiles = () => {
+  const refreshUsuarios = () => {
     const token = localStorage.getItem('token');
-    axios.get('/api/perfil', {
+    axios.get("/api/perfil/usuarios", {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(response => {
-      if (Array.isArray(response.data)) {
-        setPerfiles(response.data);
-      } else {
-        setPerfiles([]);
-        setError('Respuesta inesperada del servidor');
-      }
+      setUsuarios(response.data);
+      setDebugMsg("Lista de usuarios actualizada");
     })
-    .catch(() => setError('Error al obtener perfiles'));
+    .catch(error => {
+      setErrorPerfiles('Error al obtener usuarios: ' + (error.response?.data?.error || error.message));
+      setDebugMsg("Error al actualizar lista de usuarios");
+    });
   };
 
   const handleInhabilitar = () => {
     if (!selectedPerfilId) {
-      setErrorPerfiles('Seleccione un perfil para inhabilitar');
+      setErrorPerfiles('Seleccione un usuario para inhabilitar');
       return;
     }
-    const perfil = perfiles.find(p => p.id_perfil.toString() === selectedPerfilId);
-    if (!perfil) {
-      setErrorPerfiles('Perfil no encontrado');
+    const usuario = usuarios.find(u => u.id_usuario.toString() === selectedPerfilId);
+    if (!usuario) {
+      setErrorPerfiles('Usuario no encontrado');
       return;
     }
     const token = localStorage.getItem('token');
-    axios.put(`/api/perfil/${selectedPerfilId}`, { nombre: perfil.nombre, estado: 0 }, {
+    console.log('Inhabilitando usuario:', selectedPerfilId);
+    console.log('Usuario antes de inhabilitar:', usuario);
+    axios.put(`/api/usuario/inhabilitar/${selectedPerfilId}`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     })
-    .then(() => {
-      setMensajePerfiles('Perfil inhabilitado correctamente');
+    .then((inhabilitar_response) => {
+      console.log('Respuesta al inhabilitar:', inhabilitar_response.data);
+      setMensajePerfiles('✅ Usuario inhabilitado correctamente. Estado: Inactivo');
+      
+      // Actualizar el usuario localmente
+      const usuariosActualizados = usuarios.map(u => {
+        if (u.id_usuario.toString() === selectedPerfilId) {
+          return { ...u, estado: 0 };
+        }
+        return u;
+      });
+      setUsuarios(usuariosActualizados);
       setSelectedPerfilId('');
-      refreshPerfiles();
     })
     .catch((error) => {
-      setErrorPerfiles('Error al inhabilitar perfil: ' + (error.response?.data?.error || error.message));
+      setErrorPerfiles('Error al inhabilitar usuario: ' + (error.response?.data?.error || error.message));
     });
   };
 
   const handleHabilitar = () => {
     if (!selectedPerfilId) {
-      setErrorPerfiles('Seleccione un perfil para habilitar');
+      setErrorPerfiles('Seleccione un usuario para habilitar');
       return;
     }
-    const perfil = perfiles.find(p => p.id_perfil.toString() === selectedPerfilId);
-    if (!perfil) {
-      setErrorPerfiles('Perfil no encontrado');
+    const usuario = usuarios.find(u => u.id_usuario.toString() === selectedPerfilId);
+    if (!usuario) {
+      setErrorPerfiles('Usuario no encontrado');
       return;
     }
     const token = localStorage.getItem('token');
-    axios.put(`/api/perfil/${selectedPerfilId}`, { nombre: perfil.nombre, estado: 1 }, {
+    console.log('Habilitando usuario:', selectedPerfilId);
+    axios.put(`/api/usuario/habilitar/${selectedPerfilId}`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(() => {
-      setMensajePerfiles('Perfil habilitado correctamente');
+      setMensajePerfiles('✅ Usuario habilitado correctamente. Estado: Activo');
+      
+      // Actualizar el usuario localmente
+      const usuariosActualizados = usuarios.map(u => {
+        if (u.id_usuario.toString() === selectedPerfilId) {
+          return { ...u, estado: 1 };
+        }
+        return u;
+      });
+      setUsuarios(usuariosActualizados);
       setSelectedPerfilId('');
-      refreshPerfiles();
     })
     .catch((error) => {
-      setErrorPerfiles('Error al habilitar perfil: ' + (error.response?.data?.error || error.message));
+      setErrorPerfiles('Error al habilitar usuario: ' + (error.response?.data?.error || error.message));
     });
   };
 
   const handleEliminar = () => {
     if (!selectedPerfilId) {
-      setErrorPerfiles('Seleccione un perfil para eliminar');
+      setErrorPerfiles('Seleccione un usuario para eliminar');
       return;
     }
-    if (!window.confirm('¿Está seguro de eliminar este perfil?')) return;
+    if (!window.confirm('¿Está seguro de eliminar este usuario?')) return;
     const token = localStorage.getItem('token');
-    axios.delete(`/api/perfil/${selectedPerfilId}`, {
+    axios.delete(`/api/usuario/${selectedPerfilId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(() => {
-      setMensajePerfiles('Perfil eliminado correctamente');
+      setMensajePerfiles('Usuario eliminado correctamente');
       setSelectedPerfilId('');
-      refreshPerfiles();
+      // Actualizar la lista de usuarios
+      axios.get("/api/perfil/usuarios", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setUsuarios(response.data);
+      });
     })
-    .catch(() => setErrorPerfiles('Error al eliminar perfil'));
+    .catch(() => setErrorPerfiles('Error al eliminar usuario'));
   };
 
   const handleEditar = () => {
     if (!selectedPerfilId) {
-      setErrorPerfiles('Seleccione un perfil para editar');
+      setErrorPerfiles('Seleccione un usuario para editar');
       return;
     }
-    const perfil = perfiles.find(p => p.id_perfil.toString() === selectedPerfilId);
-    if (!perfil) {
-      setErrorPerfiles('Perfil no encontrado');
+    const usuario = usuarios.find(u => u.id_usuario.toString() === selectedPerfilId);
+    console.log('Usuario encontrado:', usuario);
+    if (!usuario) {
+      setErrorPerfiles('Usuario no encontrado');
       return;
     }
-    const nuevoNombre = prompt('Ingrese el nuevo nombre del perfil:', perfil.nombre);
+    const nuevoNombre = prompt('Ingrese el nuevo nombre de usuario:', usuario.username);
     if (nuevoNombre === null || nuevoNombre.trim() === '') {
       setErrorPerfiles('Nombre inválido');
       return;
     }
     const token = localStorage.getItem('token');
-    axios.put(`/api/perfil/${selectedPerfilId}`, { nombre: nuevoNombre.trim(), estado: perfil.estado }, {
-      headers: { Authorization: `Bearer ${token}` }
+    console.log('Token a utilizar:', token);
+    try {
+      // Decodificar y mostrar el payload del token
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Token payload:', payload);
+    } catch (error) {
+      console.error('Error al decodificar token:', error);
+    }
+    axios.get('/api/perfil', {
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     })
-    .then(() => {
-      setMensajePerfiles('Perfil actualizado correctamente');
-      refreshPerfiles();
+    .then(perfilesResponse => {
+      console.log('Perfiles disponibles:', perfilesResponse.data);
+      
+      // Encontrar el perfil correcto
+      const perfilEncontrado = perfilesResponse.data.find(p => p.nombre.toLowerCase() === usuario.perfil.toLowerCase());
+      if (!perfilEncontrado) {
+        setErrorPerfiles('Error: No se pudo encontrar el perfil del usuario');
+        return;
+      }
+      
+      console.log('Perfil encontrado:', perfilEncontrado);
+      const datosActualizacion = {
+        username: nuevoNombre.trim(),
+        id_perfil: perfilEncontrado.id_perfil
+      };
+      console.log('Datos a enviar en la actualización:', datosActualizacion);
+      
+      return axios.put(`/api/usuario/${selectedPerfilId}`, datosActualizacion, {
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+      });
     })
-    .catch(() => setErrorPerfiles('Error al actualizar perfil'));
+    .then((editar_response) => {
+      if (!editar_response) return; // Si no hay respuesta es porque hubo error al obtener el perfil
+      console.log('Respuesta completa del servidor:', editar_response);
+      console.log('Respuesta al editar:', editar_response.data);
+      setMensajePerfiles('Usuario actualizado correctamente');
+      
+      // Actualizar el usuario localmente
+      const usuariosActualizados = usuarios.map(u => {
+        if (u.id_usuario.toString() === selectedPerfilId) {
+          return { ...u, username: nuevoNombre.trim() };
+        }
+        return u;
+      });
+      setUsuarios(usuariosActualizados);
+      setSelectedPerfilId('');
+    })
+    .catch(() => setErrorPerfiles('Error al actualizar usuario'));
   };
 
   return (
@@ -275,7 +350,7 @@ function RegistroPerfil() {
             <option value="">Seleccione un Usuario</option>
             {filteredUsuarios.map((usuario, index) => (
               <option key={usuario.id_usuario ? usuario.id_usuario.toString() : index} value={usuario.id_usuario || usuario.id}>
-                ID {usuario.id_usuario || usuario.id}, Usuario: {usuario.username || usuario.usuario}, Estado: {usuario.estado !== undefined ? (usuario.estado ? 'Activo' : 'Inactivo') : usuario.nombre_estado}
+                ID: {usuario.id_usuario || usuario.id} | Usuario: {usuario.username || usuario.usuario} | Estado: {parseInt(usuario.estado) === 1 ? '✅ Activo' : '❌ Inactivo'}
               </option>  
             ))}
           </select>
@@ -294,3 +369,4 @@ function RegistroPerfil() {
 }
 
 export default RegistroPerfil;
+

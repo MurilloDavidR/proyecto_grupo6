@@ -2,6 +2,7 @@
 const express = require('express'); // Framework para crear servidores en Node.js
 const router = express.Router(); // Manejador de rutas en Express
 const Usuario = require('../models/usuario'); // Modelo de usuario para interactuar con la base de datos
+const { authenticateToken, authorizeRoles } = require('../middleware/auth'); // Middleware de autenticación
 const bcrypt = require('bcrypt'); // Biblioteca para encriptar contraseñas
 const jwt = require('jsonwebtoken'); // ✅ IMPORTANTE - Manejo de autenticación con tokens JWT
 const { enviarCorreoClave } = require('../utils/email'); // Función para enviar correos de recuperación
@@ -107,7 +108,8 @@ router.post('/login', async (req, res) => {
       {
         id_usuario: usuario.id_usuario,
         id_perfil: usuario.id_perfil,
-        perfil: usuario.perfil_nombre
+        perfil: usuario.perfil_nombre,
+        username: username
       },
       SECRET_KEY,
       { expiresIn: '1h' } // Expira en 1 hora
@@ -121,5 +123,73 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Exportación del módulo de rutas
+// Ruta para inhabilitar un usuario (estado = 0)
+router.put('/inhabilitar/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await db.execute('UPDATE usuario SET estado = 0 WHERE id_usuario = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.json({ message: 'Usuario inhabilitado correctamente' });
+  } catch (error) {
+    console.error('❌ Error al inhabilitar usuario:', error);
+    res.status(500).json({ error: 'Error al inhabilitar usuario' });
+  }
+});
+
+// Ruta para habilitar un usuario (estado = 1)
+router.put('/habilitar/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await db.execute('UPDATE usuario SET estado = 1 WHERE id_usuario = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.json({ message: 'Usuario habilitado correctamente' });
+  } catch (error) {
+    console.error('❌ Error al habilitar usuario:', error);
+    res.status(500).json({ error: 'Error al habilitar usuario' });
+  }
+});
+
+// Ruta para eliminar un usuario
+router.delete('/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await db.execute('DELETE FROM usuario WHERE id_usuario = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.json({ message: 'Usuario eliminado correctamente' });
+  } catch (error) {
+    console.error('❌ Error al eliminar usuario:', error);
+    res.status(500).json({ error: 'Error al eliminar usuario' });
+  }
+});
+
+// Ruta para editar un usuario (actualizar username y perfil)
+router.put('/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+  const { id } = req.params;
+  const { username, id_perfil } = req.body;
+
+  if (!username || !id_perfil) {
+    return res.status(400).json({ error: 'Los campos username e id_perfil son obligatorios' });
+  }
+
+  try {
+    const [result] = await db.execute(
+      'UPDATE usuario SET username = ?, id_perfil = ? WHERE id_usuario = ?',
+      [username, id_perfil, id]
+    );
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.json({ message: 'Usuario actualizado correctamente' });
+  } catch (error) {
+    console.error('❌ Error al actualizar usuario:', error);
+    res.status(500).json({ error: 'Error al actualizar usuario' });
+  }
+});
+
 module.exports = router;

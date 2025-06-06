@@ -33,7 +33,8 @@ function Login() {
       localStorage.setItem("username", res.data.username);
 
       // Verificar permisos y redirigir al usuario según su perfil
-      if (res.data.perfil === "Administrador") {
+      console.log("Perfil recibido:", res.data.perfil);
+      if (res.data.perfil.toLowerCase() === "administrador") {
         navigate("/dashboard");
       } else {
         alert("⚠️ No tienes permisos para ingresar."); // Mensaje de acceso denegado

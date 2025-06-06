@@ -80,12 +80,40 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 router.get('/usuarios', authenticateToken, async (req, res) => {
   try {
     const [rows] = await db.execute(
-      "SELECT u.id_usuario, u.username, p.nombre as perfil, p.estado FROM usuario u JOIN perfil p ON u.id_perfil = p.id_perfil"
+      "SELECT u.id_usuario, u.username, u.id_perfil, p.nombre as perfil, u.estado FROM usuario u JOIN perfil p ON u.id_perfil = p.id_perfil"
     );
     res.json(rows);
   } catch (error) {
     console.error('❌ Error al obtener usuarios con perfil:', error);
     res.status(500).json({ error: 'Error al obtener usuarios con perfil' });
+  }
+});
+
+router.put('/inhabilitar/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await db.query('UPDATE perfil SET estado = 0 WHERE id_perfil = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Perfil no encontrado' });
+    }
+    res.json({ message: '✅ Perfil inhabilitado exitosamente' });
+  } catch (error) {
+    console.error('❌ Error al inhabilitar perfil:', error);
+    res.status(500).json({ error: 'Error al inhabilitar el perfil' });
+  }
+});
+
+router.put('/habilitar/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [result] = await db.query('UPDATE perfil SET estado = 1 WHERE id_perfil = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Perfil no encontrado' });
+    }
+    res.json({ message: '✅ Perfil habilitado exitosamente' });
+  } catch (error) {
+    console.error('❌ Error al habilitar perfil:', error);
+    res.status(500).json({ error: 'Error al habilitar el perfil' });
   }
 });
 
