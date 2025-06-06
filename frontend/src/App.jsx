@@ -1,23 +1,25 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Inicio from "./pages/Inicio";
 import RegistroPerfil from "./pages/RegistroPerfil";
-import RegistroPersona from "./pages/RegistroPersona"; // <-- importa el nuevo componente
+import RegistroPersona from "./pages/RegistroPersona";
 import Login from "./Login";
 import RecuperarClave from "./pages/RecuperarClave";
-import RegistroUsuario  from "./pages/RegistroUsuario";
+import RegistroUsuario from "./pages/RegistroUsuario";
 import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Inicio />} />
-        <Route path="/registro-perfil" element={<RegistroPerfil />} />
-        <Route path="/registro-persona" element={<RegistroPersona />} /> 
+        <Route path="/registro-persona" element={<RegistroPersona />} />
         <Route path="/login" element={<Login />} />
         <Route path="/recuperar-clave" element={<RecuperarClave />} />
-        <Route path="/registro-usuario" element={<RegistroUsuario />} />
-        <Route path="/dashboard" element={<Dashboard />} /> {/* agregar más rutas aquí */}
+        {/* Rutas protegidas */}
+        <Route path="/registro-perfil" element={<PrivateRoute><RegistroPerfil /></PrivateRoute>} />
+        <Route path="/registro-usuario" element={<PrivateRoute><RegistroUsuario /></PrivateRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         {/* Puedes agregar más rutas según sea necesario */}
       </Routes>
     </Router>

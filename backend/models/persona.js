@@ -1,7 +1,5 @@
-const db = require('../config/db');
-
 const Persona = {
-  crearPersona: async (nombres, apellidos, correo, direccion, municipio, telefono) => {
+  crearPersona: async (db, nombres, apellidos, correo, direccion, municipio, telefono) => {
     const [result] = await db.execute(
       `INSERT INTO persona (nombres, apellidos, correo, direccion, municipio, telefono)
        VALUES (?, ?, ?, ?, ?, ?)`,
@@ -17,7 +15,7 @@ const Persona = {
     return result.insertId;
   },
 
-  obtenerPersonas: async () => {
+  obtenerPersonas: async (db) => {
     const [rows] = await db.execute('SELECT * FROM persona');
     return rows;
   }

@@ -2,7 +2,7 @@
 import React, { useState } from "react"; // Hook para manejar el estado del formulario
 import { useNavigate } from "react-router-dom"; // Hook para la navegación entre páginas
 import "./Login.css"; // Archivo de estilos CSS
-import axios from 'axios'; // Librería para realizar solicitudes HTTP
+import api from './utils/axios'; // Importar la configuración de axios
 
 // Definición del componente Login
 function Login() {
@@ -22,7 +22,7 @@ function Login() {
       console.log("🧾 Enviando datos:", { username: usuario, password: contraseña });
 
       // Enviar credenciales al backend para autenticación
-      const res = await axios.post('http://localhost:3000/api/usuario/login', {
+      const res = await api.post('/usuario/login', {
         username: usuario,
         password: contraseña
       });
@@ -34,12 +34,8 @@ function Login() {
 
       // Verificar permisos y redirigir al usuario según su perfil
       console.log("Perfil recibido:", res.data.perfil);
-      if (res.data.perfil.toLowerCase() === "administrador") {
-        navigate("/dashboard");
-      } else {
-        alert("⚠️ No tienes permisos para ingresar."); // Mensaje de acceso denegado
-        localStorage.clear(); // Limpia los datos en caso de acceso restringido
-      }
+      // Redirigir al dashboard independientemente del perfil
+      navigate("/dashboard");
     } catch (err) {
       console.error("❌ Error en frontend login:", err);
 

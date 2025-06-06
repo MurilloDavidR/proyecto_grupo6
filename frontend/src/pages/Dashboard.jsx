@@ -31,16 +31,18 @@ function Dashboard() {
       </div>
 
       <div className="dashboard-content">
-        <div className="dashboard-card">
-          <h3>Gestión de Perfiles</h3>
-          <p>Administra los perfiles y usuarios del sistema</p>
-          <button 
-            className="dashboard-button"
-            onClick={() => navigate('/registro-perfil')}
-          >
-            Gestionar Perfiles
-          </button>
-        </div>
+        {perfil.toLowerCase() === 'administrador' && (
+          <div className="dashboard-card">
+            <h3>Gestión de Perfiles</h3>
+            <p>Administra los perfiles y usuarios del sistema</p>
+            <button 
+              className="dashboard-button"
+              onClick={() => navigate('/registro-perfil')}
+            >
+              Gestionar Perfiles
+            </button>
+          </div>
+        )}
 
         <div className="dashboard-card">
           <h3>Panel de Control</h3>
