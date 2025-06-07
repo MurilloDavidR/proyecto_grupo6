@@ -22,9 +22,17 @@ const Usuario = {
   },
 
   obtenerUsuarios: async (db) => {
-    const [rows] = await db.execute('SELECT * FROM usuario');
-    return rows;
-  }
-};
+  const [rows] = await db.execute(`
+    SELECT 
+      u.id_usuario, u.username, u.estado, 
+      p.nombres, p.apellidos, p.correo, p.telefono, p.direccion, p.municipio,
+      pr.nombre AS perfil
+    FROM usuario u
+    JOIN persona p ON u.id_persona = p.id_persona
+    JOIN perfil pr ON u.id_perfil = pr.id_perfil
+  `);
+  return rows;
+},
+}
 
 module.exports = Usuario;

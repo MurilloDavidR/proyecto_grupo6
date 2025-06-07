@@ -1,13 +1,16 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = process.env.JWT_SECRET || 'Colombia2025';
+// Clave secreta que usas en tu backend (¡debe coincidir!)
+const SECRET_KEY = 'Colombia2025';
 
+// Información del usuario para el token (ajústala si usas otros campos)
 const payload = {
-  username: 'admin',
-  perfil: 'administrador',
+  username: 'estebanquilindo', // puede ser otro username registrado
+  perfil: 'Administrador'      // debe coincidir con los roles válidos en tu sistema
 };
 
-const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '100y' }); // Token válido por 100 años
+// Generar token válido por 100 años (solo para pruebas)
+const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '100y' });
 
-console.log('Token JWT válido permanente para pruebas:');
+console.log('🔐 Token JWT generado exitosamente:\n');
 console.log(token);

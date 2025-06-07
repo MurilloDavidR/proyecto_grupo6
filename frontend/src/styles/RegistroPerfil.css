@@ -1,178 +1,194 @@
+/* Fondo general con gradiente atractivo */
 .registro-perfil-container {
-  background: linear-gradient(135deg, #013220 0%, #025d3b 100%);
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
   min-height: 100vh;
   padding: 2rem;
-  color: white;
+  color: #fff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Encabezado */
 .header-section {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2rem;
   border-radius: 15px;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  backdrop-filter: blur(6px);
 }
 
 .welcome-text {
-  color: #ffffff;
-  font-size: 2rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #9fffc2;
   margin: 0;
 }
 
 .profile-text {
-  color: #a0e6c8;
+  font-size: 1.2rem;
+  color: #d6ffe6;
   margin-top: 0.5rem;
-  font-size: 1.1rem;
 }
 
-.debug-message {
-  color: white;
-  background-color: rgba(0, 100, 0, 0.5);
-  padding: 10px;
-  border-radius: 8px;
-  margin: 1rem 0;
-}
-
+/* Tabs */
 .tabs-container {
   display: flex;
+  justify-content: center;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .tab-button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
+  padding: 12px 30px;
   font-size: 1rem;
+  border: 2px solid #21c48d;
+  border-radius: 12px;
+  background-color: transparent;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+}
+
+.tab-button:hover {
+  background-color: #21c48d;
+  color: #000;
+  font-weight: bold;
 }
 
 .tab-button.active {
-  background: #018441;
-  color: white;
+  background-color: #21c48d;
+  color: #fff;
+  font-weight: bold;
+  transform: scale(1.05);
 }
 
+/* Secciones */
 .content-section {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  padding: 2rem;
-  border-radius: 15px;
-  margin-bottom: 1.5rem;
-}
-
-.user-list {
-  list-style: none;
-  padding: 0;
-}
-
-.user-item {
   background: rgba(255, 255, 255, 0.05);
-  padding: 1rem;
-  margin-bottom: 0.5rem;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
-.search-bar {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-}
-
-.search-bar::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.user-select {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #013220;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-/* Estilo para las opciones del select */
-.user-select option {
-  background: white;
-  color: #013220;
-  padding: 12px;
-  font-size: 1rem;
-}
-
-/* Estilo para cuando el select está enfocado */
-.user-select:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #018441;
-}
-
-.action-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;  margin: 0 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: #018441;
-  color: white;
-}
-
-.action-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.action-button.delete {
-  background: #d32f2f;
-}
-
-.action-button.edit {
-  background: #1976d2;
-}
-
+/* Mensajes */
 .message {
   padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .success {
-  background: rgba(76, 175, 80, 0.2);
-  color: #81c784;
+  background-color: #d1f3e0;
+  color: #2e7d32;
+  box-shadow: 0 0 10px rgba(46, 125, 50, 0.3);
 }
 
 .error {
-  background: rgba(244, 67, 54, 0.2);
-  color: #e57373;
+  background-color: #fddede;
+  color: #c62828;
+  box-shadow: 0 0 10px rgba(198, 40, 40, 0.3);
+}
+
+/* Campos */
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  transition: box-shadow 0.3s;
+}
+
+input:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #21c48d;
+}
+
+/* Tabla */
+.crud-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.crud-table th, .crud-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.crud-table th {
+  background: #21c48d;
+  color: white;
+  font-weight: bold;
+}
+
+.crud-table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Botones */
+.action-button {
+  padding: 10px 18px;
+  margin: 2px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: white;
+  background-color: #21c48d;
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #1aa46e;
+  transform: scale(1.05);
+}
+
+.action-button.delete {
+  background-color: #e53935;
+}
+
+.action-button.delete:hover {
+  background-color: #c62828;
+}
+
+.action-button.edit {
+  background-color: #1976d2;
+}
+
+.action-button.edit:hover {
+  background-color: #1565c0;
+}
+
+/* Selectores y campos */
+.user-select {
+  margin-bottom: 1rem;
+  background: #f0fff4;
+  color: #333;
 }
 
 .back-button {
-  background: #018441;
+  background-color: #21c48d;
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  margin-top: 3rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 2rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .back-button:hover {
-  background: #02a652;
-  transform: translateY(-2px);
+  background-color: #1aa46e;
+  transform: translateY(-3px) scale(1.02);
 }

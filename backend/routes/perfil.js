@@ -41,7 +41,7 @@ router.post('/', authenticateToken, authorizeRoles('administrador'), async (req,
 });
 
 // 📌 Actualizar un perfil
-router.put('/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+router.put('/:id', authenticateToken, authorizeRoles('Administrador'), async (req, res) => {
   const { id } = req.params;
   const { nombre, estado } = req.body;
 
@@ -89,7 +89,7 @@ router.get('/usuarios', authenticateToken, async (req, res) => {
   }
 });
 
-router.put('/inhabilitar/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+router.put('/inhabilitar/:id', authenticateToken, authorizeRoles('Administrador'), async (req, res) => {
   const { id } = req.params;
   try {
     const [result] = await db.query('UPDATE perfil SET estado = 0 WHERE id_perfil = ?', [id]);
@@ -103,7 +103,7 @@ router.put('/inhabilitar/:id', authenticateToken, authorizeRoles('administrador'
   }
 });
 
-router.put('/habilitar/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+router.put('/habilitar/:id', authenticateToken, authorizeRoles('Administrador'), async (req, res) => {
   const { id } = req.params;
   try {
     const [result] = await db.query('UPDATE perfil SET estado = 1 WHERE id_perfil = ?', [id]);
@@ -114,6 +114,26 @@ router.put('/habilitar/:id', authenticateToken, authorizeRoles('administrador'),
   } catch (error) {
     console.error('❌ Error al habilitar perfil:', error);
     res.status(500).json({ error: 'Error al habilitar el perfil' });
+  }
+});
+
+// GET /api/perfil/usuarios
+router.get('/usuarios',  async (req, res) => {
+  try {
+    const [rows] = await db.execute(`
+      SELECT 
+        u.id_usuario, u.username, u.id_perfil, u.estado,
+        p.nombre AS perfil,
+        per.id_persona, per.nombres, per.apellidos, per.correo, 
+        per.direccion, per.municipio, per.telefono
+      FROM usuario u
+      JOIN perfil p ON u.id_perfil = p.id_perfil
+      JOIN persona per ON u.id_persona = per.id_persona
+    `);
+    res.json(rows);
+  } catch (error) {
+    console.error("❌ Error al obtener usuarios con perfil y persona:", error);
+    res.status(500).json({ error: 'Error al obtener los usuarios' });
   }
 });
 

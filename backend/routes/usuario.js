@@ -20,7 +20,7 @@ router.post('/registro', async (req, res) => {
 
   try {
     // Creación del usuario en la base de datos
-    const id_usuario = await Usuario.crearUsuario(username, password, id_persona, id_perfil, estado);
+    const id_usuario = await Usuario.crearUsuario(db, username, password, id_persona, id_perfil, estado);
     res.json({ message: '✅ Usuario registrado correctamente', id_usuario });
   } catch (error) {
     // Manejo de errores en caso de usuario duplicado
@@ -189,6 +189,150 @@ router.put('/:id', authenticateToken, authorizeRoles('administrador'), async (re
   } catch (error) {
     console.error('❌ Error al actualizar usuario:', error);
     res.status(500).json({ error: 'Error al actualizar usuario' });
+  }
+});
+
+// routes/usuario.js
+
+router.get('/', authenticateToken, authorizeRoles('Administrador'), async (req, res) => {
+  try {
+    const [rows] = await db.execute(`
+      SELECT 
+        u.id_usuario, u.username, u.estado, u.id_perfil,
+        p.id_persona, p.nombres, p.apellidos, p.correo, p.direccion, p.municipio, p.telefono,
+        pf.nombre AS perfil_nombre
+      FROM usuario u
+      JOIN persona p ON u.id_persona = p.id_persona
+      JOIN perfil pf ON u.id_perfil = pf.id_perfil
+    `);
+    res.json(rows);
+  } catch (error) {
+    console.error('❌ Error al obtener usuarios:', error);
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
+});
+
+// routes/usuario.js - ruta para crear usuario con persona
+
+router.post('/crear', authenticateToken, authorizeRoles('Administrador'), async (req, res) => {
+  const {
+    username,
+    password,
+    estado,
+    id_perfil,
+    nombres,
+    apellidos,
+    correo,
+    direccion,
+    municipio,
+    telefono
+  } = req.body;
+
+  if (!username || !password || !id_perfil || !nombres || !apellidos || !correo) {
+    return res.status(400).json({ error: 'Faltan campos obligatorios' });
+  }
+
+  try {
+    // Verificar si el correo ya existe
+    const [existingEmail] = await db.execute('SELECT id_persona FROM persona WHERE correo = ?', [correo]);
+    if (existingEmail.length > 0) {
+      return res.status(400).json({ error: 'El correo ya está en uso' });
+    }
+
+    // Insertar en persona
+    const [personaResult] = await db.execute(
+      'INSERT INTO persona (nombres, apellidos, correo, direccion, municipio, telefono) VALUES (?, ?, ?, ?, ?, ?)',
+      [nombres, apellidos, correo, direccion, municipio, telefono]
+    );
+    const id_persona = personaResult.insertId;
+
+    // Encriptar contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insertar en usuario
+    await db.execute(
+      'INSERT INTO usuario (username, password, estado, id_perfil, id_persona) VALUES (?, ?, ?, ?, ?)',
+      [username, hashedPassword, estado ? 1 : 0, id_perfil, id_persona]
+    );
+
+    res.json({ message: 'Usuario creado correctamente' });
+  } catch (error) {
+    console.error('❌ Error al crear usuario:', error);
+    res.status(500).json({ error: 'Error al crear usuario' });
+  }
+});
+
+// routes/usuario.js//actualizar usuario y persona. 
+
+router.put('/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+  const { id } = req.params;
+  const {
+    username,
+    estado,
+    id_perfil,
+    nombres,
+    apellidos,
+    correo,
+    direccion,
+    municipio,
+    telefono
+  } = req.body;
+
+  if (!username || !id_perfil || !nombres || !apellidos || !correo) {
+    return res.status(400).json({ error: 'Faltan campos obligatorios' });
+  }
+
+  try {
+    // Obtener id_persona asociado al usuario
+    const [userRows] = await db.execute('SELECT id_persona FROM usuario WHERE id_usuario = ?', [id]);
+    if (userRows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    const id_persona = userRows[0].id_persona;
+
+    // Actualizar persona
+    await db.execute(
+      'UPDATE persona SET nombres = ?, apellidos = ?, correo = ?, direccion = ?, municipio = ?, telefono = ? WHERE id_persona = ?',
+      [nombres, apellidos, correo, direccion, municipio, telefono, id_persona]
+    );
+
+    // Actualizar usuario
+    await db.execute(
+      'UPDATE usuario SET username = ?, estado = ?, id_perfil = ? WHERE id_usuario = ?',
+      [username, estado ? 1 : 0, id_perfil, id]
+    );
+
+    res.json({ message: 'Usuario actualizado correctamente' });
+  } catch (error) {
+    console.error('❌ Error al actualizar usuario:', error);
+    res.status(500).json({ error: 'Error al actualizar usuario' });
+  }
+});
+
+
+// routes/usuario.js/ eliminar
+
+router.delete('/:id', authenticateToken, authorizeRoles('administrador'), async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Obtener id_persona asociado al usuario
+    const [userRows] = await db.execute('SELECT id_persona FROM usuario WHERE id_usuario = ?', [id]);
+    if (userRows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    const id_persona = userRows[0].id_persona;
+
+    // Eliminar usuario
+    await db.execute('DELETE FROM usuario WHERE id_usuario = ?', [id]);
+
+    // Eliminar persona
+    await db.execute('DELETE FROM persona WHERE id_persona = ?', [id_persona]);
+
+    res.json({ message: 'Usuario y persona eliminados correctamente' });
+  } catch (error) {
+    console.error('❌ Error al eliminar usuario:', error);
+    res.status(500).json({ error: 'Error al eliminar usuario' });
   }
 });
 

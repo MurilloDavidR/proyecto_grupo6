@@ -3,6 +3,7 @@ import React, { useState } from "react"; // Hook para manejar el estado del form
 import { useNavigate } from "react-router-dom"; // Hook para la navegación entre páginas
 import "./Login.css"; // Archivo de estilos CSS
 import api from './utils/axios'; // Importar la configuración de axios
+import moment from "moment";
 
 // Definición del componente Login
 function Login() {
@@ -111,6 +112,13 @@ function Login() {
           >
             ¿Olvidaste tu contraseña?
           </p>
+           <button
+              type="button"
+              className="btn btn-secundario"
+              onClick={() => navigate('/')}
+            >
+              ← Volver al inicio de sesión
+            </button>
         </div>
       </div>
     </div>

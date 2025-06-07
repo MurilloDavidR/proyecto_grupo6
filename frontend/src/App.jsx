@@ -4,7 +4,6 @@ import RegistroPerfil from "./pages/RegistroPerfil";
 import RegistroPersona from "./pages/RegistroPersona";
 import Login from "./Login";
 import RecuperarClave from "./pages/RecuperarClave";
-import RegistroUsuario from "./pages/RegistroUsuario";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -18,7 +17,7 @@ function App() {
         <Route path="/recuperar-clave" element={<RecuperarClave />} />
         {/* Rutas protegidas */}
         <Route path="/registro-perfil" element={<PrivateRoute><RegistroPerfil /></PrivateRoute>} />
-        <Route path="/registro-usuario" element={<PrivateRoute><RegistroUsuario /></PrivateRoute>} />
+       
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         {/* Puedes agregar más rutas según sea necesario */}
       </Routes>

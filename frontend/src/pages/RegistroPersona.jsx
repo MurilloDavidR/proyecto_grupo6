@@ -97,7 +97,7 @@ const RegistroPersona = () => {
             <button
               type="button"
               className="btn btn-secundario"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/')}
             >
               ← Volver al inicio de sesión
             </button>
