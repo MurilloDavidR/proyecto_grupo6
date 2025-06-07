@@ -13,12 +13,13 @@
   border-radius: 15px;
   margin-bottom: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .dashboard-title {
   color: #ffffff;
   font-size: 2.2rem;
-  margin: 0;
+  margin: 0 0 0.5rem 0;
   font-weight: 600;
 }
 
@@ -29,13 +30,14 @@
 }
 
 .dashboard-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  justify-content: center;
   margin-top: 2rem;
 }
 
 .dashboard-card {
+  max-width: 400px;
+  width: 100%;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   padding: 1.5rem;
@@ -78,21 +80,44 @@
   background: #f44336;
 }
 
+.calendar-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.calendar-header h2 {
+  color: #ffffff;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-description {
+  color: #a0e6c8;
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .dashboard-calendar {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   padding: 2rem;
   border-radius: 15px;
   margin: 2rem 0;
+}
+
+.calendar-content {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 2fr 1fr;
   gap: 2rem;
-  align-items: start;
+  margin-top: 2rem;
 }
 
 .calendar-container {
   width: 100%;
   max-width: 600px;
+  order: 1;
 }
 
 .calendar-container .react-calendar {
@@ -142,17 +167,21 @@
 }
 
 .calendar-info {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
   min-width: 200px;
+  order: 2;
 }
 
 .info-card {
   background: rgba(255, 255, 255, 0.15);
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 10px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .info-card h3 {
@@ -165,29 +194,46 @@
   font-size: 1.2rem;
 }
 
-.dashboard-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 2rem;
+.weather-info-card {
+  min-width: 200px !important;
 }
 
-.stat-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1rem;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.stat-number {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #4CAF50;
+.weather-info-card .weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   margin: 0.5rem 0;
 }
 
-.stat-label {
+.weather-info-card .weather-main img {
+  width: 50px;
+  height: 50px;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
+}
+
+.weather-info-card .temperature {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.weather-info-card .weather-description {
   color: #a0e6c8;
+  margin: 0.5rem 0;
+  text-transform: capitalize;
+  font-size: 1rem;
+}
+
+.weather-info-card .weather-details {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.weather-info-card .weather-details small {
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
 }
 
@@ -200,15 +246,18 @@
 }
 
 .farming-recommendations h2 {
-  color: #ffffff;
   text-align: center;
-  margin-bottom: 1.5rem;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .recommendations-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
 }
 
 .recommendation-card {
@@ -216,21 +265,43 @@
   padding: 1.5rem;
   border-radius: 12px;
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .recommendation-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .recommendation-card h3 {
   color: #a0e6c8;
   margin-bottom: 1rem;
   text-align: center;
+  font-size: 1.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
 }
 
 .recommendation-card p {
   color: white;
   margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.luna-ideal {
+  color: #ffd700 !important;
+  font-weight: bold;
+  text-align: center;
+  background: rgba(255, 215, 0, 0.1);
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-top: auto;
 }
 
 .recommendation-card ul {
@@ -255,7 +326,7 @@
   }
   
   .dashboard-content {
-    grid-template-columns: 1fr;
+    padding: 0 1rem;
   }
   
   .dashboard-button {
@@ -263,17 +334,31 @@
     margin: 0.5rem 0;
   }
 
-  .dashboard-calendar {
+  .calendar-content {
     grid-template-columns: 1fr;
   }
 
+  .calendar-container {
+    order: 2;
+    margin: 2rem auto;
+  }
+
   .calendar-info {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    order: 1;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
   }
 
   .info-card {
-    min-width: 150px;
+    min-width: 100%;
+  }
+
+  .dashboard-calendar {
+    padding: 1rem;
+  }
+
+  .recommendations-grid {
+    grid-template-columns: 1fr;
+    padding: 0;
   }
 }
