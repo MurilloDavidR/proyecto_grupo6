@@ -1,0 +1,255 @@
+.perfil-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #f0f2f5;
+  background-image: url('/cafe 3.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.perfil-header {
+  background-color: #ffffff;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.perfil-header h1 {
+  font-size: 1.2rem;
+  color: #333;
+  margin: 0;
+}
+
+.perfil-content {
+  display: flex;
+  height: calc(100vh - 84px);
+}
+
+/* Sidebar */
+.perfil-sidebar {
+  width: 250px;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.perfil-avatar {
+  width: 120px;
+  height: 120px;
+  background-color: #e9ecef;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #495057;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+
+.perfil-sidebar h3 {
+  margin: 0.5rem 0;
+  color: #333;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.perfil-sidebar p {
+  color: #666;
+  margin: 0.5rem 0 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+/* Main Content */
+.perfil-main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.perfil-section {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.perfil-section h2 {
+  font-size: 1rem;
+  color: #333;
+  padding: 1rem;
+  margin: 0;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.perfil-grid {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.perfil-item {
+  padding: 0.5rem;
+}
+
+.perfil-item label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.perfil-item p {
+  margin: 0;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* Campos de edición */
+.perfil-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #333;
+  background-color: #ffffff;
+}
+
+.perfil-input:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
+}
+
+/* Botones */
+.edit-button, .save-button, .cancel-button, .dashboard-button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #ddd;
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.edit-button {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.save-button {
+  background-color: #0066cc;
+  color: white;
+  border-color: #0066cc;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.edit-button:hover {
+  background-color: #e9ecef;
+}
+
+.save-button:hover {
+  background-color: #0056b3;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
+}
+
+/* Mensajes */
+.success-message, .error-message {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Menú superior */
+.perfil-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.perfil-menu-item {
+  color: #666;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.perfil-menu-item:hover {
+  color: #333;
+}
+
+/* Barra de estado */
+.perfil-statusbar {
+  height: 24px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #ddd;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Botones de edición agrupados */
+.edit-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .perfil-content {
+    flex-direction: column;
+  }
+
+  .perfil-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .perfil-grid {
+    grid-template-columns: 1fr;
+  }
+}

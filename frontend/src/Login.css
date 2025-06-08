@@ -1,0 +1,124 @@
+/* Fondo y fuente global */
+html, body {
+    height: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fdf6e3;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+}
+
+/* Título principal */
+.titulo {
+    font-size: 32px;
+    font-weight: bold;
+    color: #2d6a4f;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Contenido dividido (imagen + formulario) */
+.login-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+/* Logo */
+.login-image img {
+    width: 280px;
+    height: auto;
+}
+
+/* Formulario */
+.login-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form h2 {
+    color: #2d6a4f;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.login-form label {
+    width: 100%;
+    margin-top: 10px;
+    color: #333;
+    font-weight: 500;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 2px solid #2d6a4f;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* Botones */
+.login-form button {
+    padding: 10px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    width: 100%;
+}
+
+.login-form button[type="submit"] {
+    background-color: #2d6a4f;
+    color: white;
+}
+
+.login-form .register-btn {
+    background-color: transparent;
+    border: 2px solid #2d6a4f;
+    color: #2d6a4f;
+    margin-top: 10px;
+}
+
+.login-form button:hover {
+    opacity: 0.9;
+}
+
+/* Enlace para recuperar contraseña */
+.forgot-password {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #2d6a4f;
+    text-decoration: underline;
+    cursor: pointer;
+}

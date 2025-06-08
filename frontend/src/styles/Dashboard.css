@@ -1,0 +1,324 @@
+.dashboard-container {
+  background: linear-gradient(rgba(1, 50, 32, 0.1), rgba(2, 93, 59, 0.1)), url('/cafe 2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard-profile {
+  color: #a0e6c8;
+  font-size: 1rem;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-admin-controls,
+.dashboard-user-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-card,
+.user-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.admin-card:hover,
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-guest-message {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem auto;
+  max-width: 800px;
+  width: 100%;
+}
+
+.guest-welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.guest-title {
+  font-size: 2rem;
+  color: #ffffff;
+  margin: 0;
+}
+
+.guest-message {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.guest-message p {
+  color: #a0e6c8;
+  font-size: 1.2em;
+  margin: 0.5rem 0;
+}
+
+.guest-image-container {
+  margin: 1rem 0;
+}
+
+.guest-logo {
+  max-width: 150px;
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+.benefits-section {
+  width: 100%;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.benefits-title {
+  color: #ffffff;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.benefit-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.benefit-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.benefit-card h4 {
+  color: #ffffff;
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+.benefit-card p {
+  color: #a0e6c8;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .benefit-card {
+    padding: 1rem;
+  }
+}
+
+.dashboard-card {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #04c45c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
+  max-width: 300px;
+}
+
+.dashboard-button:hover {
+  background-color: #038d42;
+}
+
+.dashboard-calendar {
+  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.calendar-header h2 {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.calendar-description {
+  text-align: center;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.calendar-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.calendar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1 1 250px;
+  max-width: 400px;
+}
+
+.info-card {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.weather-info-card img {
+  width: 50px;
+  height: 50px;
+}
+
+.calendar-container {
+  flex: 1 1 250px;
+  max-width: 350px;
+}
+
+.farming-recommendations {
+  margin-top: 2rem;
+}
+
+.farming-recommendations h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.recommendations-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.recommendation-card {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 1rem;
+  flex: 1 1 250px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.luna-ideal {
+  margin-top: 0.5rem;
+  font-style: italic;
+  color: #a0e6c8;
+}
+
+.logout {
+  background-color: #c62828;
+  max-width: 200px;
+}
+
+.logout:hover {
+  background-color: #a32222;
+}
+
+/* Responsive ajustes */
+@media (max-width: 768px) {
+  .calendar-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dashboard-title {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-button {
+    max-width: 100%;
+  }
+
+  .dashboard-card {
+    padding: 1rem;
+  }
+
+  .calendar-container, .calendar-info {
+    max-width: 100%;
+  }
+}

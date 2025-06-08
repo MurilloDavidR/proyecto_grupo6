@@ -1,0 +1,200 @@
+/* Fondo general con gradiente atractivo */
+.registro-perfil-container {
+  background-image: url('/cafe 1.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+  padding: 2rem;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Encabezado */
+.header-section {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+.welcome-text {
+  font-size: 3rem;
+  font-weight: bolder;
+  color: #00ff99;
+  margin: 0;
+  text-shadow: 0 0 8px #00ff99;
+}
+
+.profile-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #aaffcc;
+  margin-top: 0.5rem;
+  text-shadow: 0 0 6px #aaffcc;
+}
+
+/* Tabs */
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tab-button {
+  padding: 12px 30px;
+  font-size: 1rem;
+  border: 2px solid #21c48d;
+  border-radius: 12px;
+  background-color: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+  background-color: #21c48d;
+  color: #000;
+  font-weight: bold;
+}
+
+.tab-button.active {
+  background-color: #21c48d;
+  color: #fff;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+/* Secciones */
+.content-section {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Mensajes */
+.message {
+  padding: 1rem;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.success {
+  background-color: #d1f3e0;
+  color: #2e7d32;
+  box-shadow: 0 0 10px rgba(46, 125, 50, 0.3);
+}
+
+.error {
+  background-color: #fddede;
+  color: #c62828;
+  box-shadow: 0 0 10px rgba(198, 40, 40, 0.3);
+}
+
+/* Campos */
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  transition: box-shadow 0.3s;
+}
+
+input:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #21c48d;
+}
+
+/* Tabla */
+.crud-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.crud-table th, .crud-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.crud-table th {
+  background: #21c48d;
+  color: white;
+  font-weight: bold;
+}
+
+.crud-table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Botones */
+.action-button {
+  padding: 10px 18px;
+  margin: 2px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: white;
+  background-color: #21c48d;
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #1aa46e;
+  transform: scale(1.05);
+}
+
+.action-button.delete {
+  background-color: #e53935;
+}
+
+.action-button.delete:hover {
+  background-color: #c62828;
+}
+
+.action-button.edit {
+  background-color: #1976d2;
+}
+
+.action-button.edit:hover {
+  background-color: #1565c0;
+}
+
+/* Selectores y campos */
+.user-select {
+  margin-bottom: 1rem;
+  background: #f0fff4;
+  color: #333;
+}
+
+.back-button {
+  background-color: #21c48d;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  margin-top: 3rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.back-button:hover {
+  background-color: #1aa46e;
+  transform: translateY(-3px) scale(1.02);
+}
