@@ -1,6 +1,6 @@
 /* Fondo general con gradiente atractivo */
 .registro-perfil-container {
-  background-image: url('/cafe 1.jpg');
+  /* background-image: linear-gradient(160deg, #4490f3 0%, #bfdbfe 50%, #93c5fd 100%); */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -8,6 +8,18 @@
   padding: 2rem;
   color: #fff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Caja de contenido tipo “glass” */
+.dashboard-box {
+  background-image: linear-gradient(160deg, #4490f3 0%, #bfdbfe 50%, #93c5fd 100%);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 25px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* Encabezado */
@@ -198,3 +210,57 @@ input:focus, select:focus {
   background-color: #1aa46e;
   transform: translateY(-3px) scale(1.02);
 }
+
+@media (max-width: 768px) {
+  .welcome-text {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .profile-text {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .tabs-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tab-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .dashboard-box {
+    padding: 1rem;
+  }
+
+  .content-section {
+    padding: 1rem;
+  }
+
+  .crud-table {
+    min-width: 800px;
+  }
+
+  .content-section {
+    overflow-x: auto;
+  }
+
+  input, select {
+    font-size: 1rem;
+  }
+
+  .action-button {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .back-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px;
+  }
+}
+

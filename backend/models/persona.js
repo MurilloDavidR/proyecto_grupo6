@@ -1,3 +1,4 @@
+const db= require('../config/db');
 const Persona = {
   crearPersona: async (db, nombres, apellidos, correo, direccion, municipio, telefono) => {
     const [result] = await db.execute(

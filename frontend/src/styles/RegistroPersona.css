@@ -1,8 +1,9 @@
+
 .registro-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
 }
 
 .registro-content {
@@ -11,6 +12,7 @@
   border-radius: 1rem;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  flex-wrap: wrap; /* Para que los elementos se acomoden verticalmente en pantallas pequeñas */
 }
 
 .registro-logo {
@@ -29,6 +31,7 @@
 .registro-card {
   padding: 2rem;
   max-width: 400px;
+  flex: 1;
 }
 
 .registro-card h2 {
@@ -86,6 +89,32 @@
   background-color: #2f5d3f;
   color: white;
 }
+
+/* 🔻 Estilo responsive para ocultar botón "Cerrar Sesión" en móviles */
+@media (max-width: 768px) {
+  .logout-button {
+    display: none !important;
+  }
+
+  .registro-container {
+    padding: 1rem;
+  }
+
+  .registro-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .registro-logo {
+    padding: 1rem;
+  }
+
+  .registro-card {
+    padding: 1rem;
+    width: 100%;
+  }
+}
+
 
 
 

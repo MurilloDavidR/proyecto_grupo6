@@ -1,13 +1,16 @@
 .dashboard-container {
-  background: linear-gradient(rgba(1, 50, 32, 0.1), rgba(2, 93, 59, 0.1)), url('/cafe 2.jpg');
+  /* background: linear-gradient(rgba(1, 50, 32, 0.1), rgba(2, 93, 59, 0.1)), url('/cafe 2.jpg'); */
+  background: linear-gradient(to bottom, #257104, #caf09f, #aed581);
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  border-radius: 15px;
   min-height: 100vh;
   padding: 1rem;
   box-sizing: border-box;
   color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px 20px 20px 20px;
 }
 
 .dashboard-header {

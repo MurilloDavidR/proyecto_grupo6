@@ -183,6 +183,7 @@ function RegistroPerfil() {
 
   return (
     <div className="registro-perfil-container">
+      <div class="dashboard-box">
       <h2>¡Bienvenido, {usuarioActual.username}!</h2>
       <p>Perfil: {usuarioActual.perfil}</p>
 
@@ -314,6 +315,7 @@ function RegistroPerfil() {
       )}
 
       <button onClick={() => navigate("/dashboard")} className="back-button">← Volver al Dashboard</button>
+      </div>
     </div>
   );
 }
