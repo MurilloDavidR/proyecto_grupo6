@@ -158,25 +158,19 @@ function RegistroPerfil() {
     }
 
     try {
-      await api.post("/usuario/crear", {
-        username: persona.username,
-        password: persona.password,
-        estado: 1,
-        id_perfil: perfilSeleccionado.id_perfil,
-        nombres: persona.nombres,
-        apellidos: persona.apellidos,
-        correo: persona.correo,
-        direccion: persona.direccion,
-        municipio: persona.municipio,
-        telefono: persona.telefono
-      });
-      alert("✅ Usuario creado correctamente");
-      cargarDatos();
-    } catch (error) {
-      alert(error.response?.data?.error || "Error al crear usuario");
-    }
-  };
-
+    await api.post("/usuario/registro", {
+      username: persona.username,
+      password: persona.password,
+      estado: 1,
+      id_perfil: perfilSeleccionado.id_perfil,
+      id_persona: persona.id_persona  // ✅ Importante: esto indica que la persona ya existe
+    });
+    alert("✅ Usuario creado correctamente");
+    cargarDatos();
+  } catch (error) {
+    alert(error.response?.data?.error || "Error al crear usuario");
+  }
+};
   const usuariosFiltrados = usuarios.filter(u =>
     `${u.username} ${u.nombres} ${u.correo}`.toLowerCase().includes(search.toLowerCase())
   );

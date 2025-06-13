@@ -48,20 +48,10 @@ router.post('/crear', authenticateToken, authorizeRoles('Administrador'), async 
   }
 
   try {
-    // Verificar si ya existe una persona con ese correo
-const [personaRows] = await db.execute('SELECT id_persona FROM persona WHERE correo = ?', [correo]);
-if (personaRows.length > 0) {
-  const id_persona_existente = personaRows[0].id_persona;
-
-  // Verificar si esa persona ya tiene un usuario
-  const [usuarioRows] = await db.execute('SELECT * FROM usuario WHERE id_persona = ?', [id_persona_existente]);
-  if (usuarioRows.length > 0) {
-    return res.status(400).json({ error: 'La persona ya tiene un usuario asociado' });
-  }
-
-  return res.status(400).json({ error: 'El correo ya está registrado para otra persona. Usa la opción "crear usuario desde persona registrada"' });
-}
-
+    const [existingEmail] = await db.execute('SELECT id_persona FROM persona WHERE correo = ?', [correo]);
+    if (existingEmail.length > 0) {
+      return res.status(400).json({ error: 'El correo ya está en uso' });
+    }
 
     const [personaResult] = await db.execute(
       'INSERT INTO persona (nombres, apellidos, correo, direccion, municipio, telefono) VALUES (?, ?, ?, ?, ?, ?)',

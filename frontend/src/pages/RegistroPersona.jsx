@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '../utils/axios';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../styles/RegistroPersona.css';
 import logo from '../logo.png';
@@ -14,8 +14,7 @@ const RegistroPersona = () => {
     correo: '',
     direccion: '',
     municipio: '',
-    telefono: '',
-    password: ''
+    telefono: ''
   });
 
   const handleChange = (e) => {
@@ -34,7 +33,7 @@ const RegistroPersona = () => {
     }
 
     try {
-      await api.post('/persona/registro', form);
+      await axios.post('http://localhost:3000/api/persona/registro', form);
       alert('✅ Persona registrada correctamente');
       setForm({
         nombres: '',
@@ -42,8 +41,7 @@ const RegistroPersona = () => {
         correo: '',
         direccion: '',
         municipio: '',
-        telefono: '',
-        password: ''
+        telefono: ''
       });
       navigate('/login');
     } catch (error) {
@@ -81,18 +79,6 @@ const RegistroPersona = () => {
                 />
               </div>
             ))}
-            <div className="form-group">
-              <label htmlFor="password">Contraseña</label>
-              <input
-                className="form-control"
-                type="password"
-                id="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
 
             <button type="submit" className="btn">Registrar Persona</button>
             <button
