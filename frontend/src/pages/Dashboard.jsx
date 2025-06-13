@@ -5,6 +5,8 @@ import moment from 'moment';
 import 'react-calendar/dist/Calendar.css';
 import "../styles/Calendar.css";
 import "../styles/Dashboard.css";
+import * as XLSX from "xlsx";
+
 
 /**
  * Dashboard Component
@@ -304,6 +306,24 @@ function Dashboard() {
     navigate("/login");
   };
 
+const exportarExcel = () => {
+  const datos = [
+    {
+      Fecha: moment(date).format("LL"),
+      Fase_Lunar: getMoonPhase(date),
+      Temporada: getTemporada(date),
+      Temperatura: weather?.main?.temp ?? "N/A",
+      Humedad: weather?.main?.humidity ?? "N/A",
+      Viento: weather?.wind?.speed ?? "N/A"
+    }
+  ];
+
+  const hoja = XLSX.utils.json_to_sheet(datos);
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, "Datos Clima");
+  XLSX.writeFile(libro, `Reporte-Clima-${moment(date).format("YYYY-MM-DD")}.xlsx`);
+};
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-header text-center">
@@ -371,7 +391,12 @@ function Dashboard() {
               </div>
             </div>
           </div>
-
+          <div className="calendar-export-buttons" style={{ marginTop: "1rem", textAlign: "center" }}>
+                    <button className="dashboard-button" onClick={exportarExcel}>
+           📊 Descargar Excel 
+         </button>
+          </div>
+          
           <div className="farming-recommendations">
             <h2>Cultivos Recomendados para la Temporada</h2>
             <div className="recommendations-grid">
